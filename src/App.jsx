@@ -2,32 +2,36 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import useDebounce from './useDebounce/useDebounce'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [searchTerm, setSearchTerm] = useState('');
 
+  const handleSearch = useDebounce((term) => {
+    // Perform search operation with the debounced term
+    console.log('Searching for:', term);
+    // const res = await fetch(
+    //   `https://demo.dataverse.org/api/search?q=${term}`
+    // );
+    // const json = await res.json();
+    // console.log(json);
+  }, 500);
+
+  const handleChange = (event) => {
+    const { value } = event.target;
+    setSearchTerm(value);
+
+    // Debounce the search callback
+    handleSearch(value);
+  };
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <input
+      type="text"
+      value={searchTerm}
+      onChange={handleChange}
+      placeholder="Search..."
+    />
     </>
   )
 }
